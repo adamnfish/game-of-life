@@ -87,13 +87,53 @@ class GolTest extends FreeSpec with ShouldMatchers {
   "isAliveNext" - {
     // rules from wikipedia
     "Any live cell with fewer than two live neighbours dies, as if caused by under-population" in {
-
+      val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(10, 10))
+      InfiniteGol.isAliveNext(Cell(0, 1), world) should equal(false)
+      InfiniteGol.isAliveNext(Cell(10, 10), world) should equal(false)
     }
 
+    "Any live cell with two or three live neighbours lives on to the next generation" in {
+      val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(1, 0), Cell(10, 10), Cell(10, 11), Cell(10, 12), Cell(11, 11))
+      InfiniteGol.isAliveNext(Cell(1, 0), world) should equal(true)
+      InfiniteGol.isAliveNext(Cell(11, 11), world) should equal(true)
+    }
+
+    "Any live cell with more than three live neighbours dies, as if by overcrowding" in {
+      val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(0, 2), Cell(1, 0), Cell(1, 1))
+      InfiniteGol.isAliveNext(Cell(1, 1), world) should equal(false)
+    }
+
+    "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction" in {
+      val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(0, 2))
+      InfiniteGol.isAliveNext(Cell(1, 1), world) should equal(true)
+    }
   }
 
   "eligibleCells" - {
 
+  }
+
+  "constraints" - {
+    val universe = ConstrainedGol(4, 3)
+    "xMin" in {
+      universe.constrainToXMin(-5) should equal(0)
+    }
+    "xMax" in {
+      universe.constrainToXMax(10) should equal(3)
+    }
+    "yMin" in {
+      universe.constrainToYMin(-5) should equal(0)
+    }
+    "yMax" in {
+      universe.constrainToYMax(3) should equal(2)
+    }
+
+    "are not in effect in an infinite universe" in {
+      InfiniteGol.constrainToXMin(-1000) should equal(-1000)
+      InfiniteGol.constrainToXMax(1000) should equal(1000)
+      InfiniteGol.constrainToYMin(-1000) should equal(-1000)
+      InfiniteGol.constrainToYMax(1000) should equal(1000)
+    }
   }
 
   "boundaries" - {
