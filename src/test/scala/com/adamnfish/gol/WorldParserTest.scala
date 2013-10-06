@@ -1,6 +1,6 @@
 package com.adamnfish.gol
 
-import org.scalatest.{FreeSpec}
+import org.scalatest.FreeSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class WorldParserTest extends FreeSpec with ShouldMatchers {
@@ -14,7 +14,7 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           ||
         """.stripMargin
       val (universe, _) = WorldParser.fromString(worldString)
-      universe should equal(InfiniteGol)
+      universe should equal(InfiniteUniverse)
       universe.max should equal(None)
       universe.min should equal(None)
     }
@@ -28,7 +28,7 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           |+
         """.stripMargin
       val (universe, world) = WorldParser.fromString(worldString)
-      universe.isInstanceOf[ConstrainedGol] should equal(true)
+      universe.isInstanceOf[ConstrainedUniverse] should equal(true)
       universe.maxX(world) should equal(4)
       universe.minX(world) should equal(0)
       universe.maxY(world) should equal(2)
@@ -49,7 +49,7 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
     }
   }
 
-  def assertWorld(universe: Gol, world: World, liveCells: Cell*): Unit = {
+  def assertWorld(universe: Universe, world: World, liveCells: Cell*): Unit = {
     (universe.minX(world) to universe.maxX(world)) flatMap { x =>
       (universe.minY(world) to universe.maxY(world)) map { y =>
         val cell: Cell = Cell(x, y)

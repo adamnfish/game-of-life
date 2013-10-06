@@ -1,6 +1,6 @@
 package com.adamnfish.gol
 
-trait Gol {
+trait Universe {
   // playing area constraints
   val min: Option[Cell]
   val max: Option[Cell]
@@ -83,14 +83,14 @@ trait Gol {
     limit.map(cell => minOrMax(n, xOrY(cell))).getOrElse(n)
   }
 }
-object InfiniteGol extends Gol {
+object InfiniteUniverse extends Universe {
   override val min = None
   override val max = None
 }
-class ConstrainedGol private(minCell: Cell, maxCell: Cell) extends Gol {
+class ConstrainedUniverse private(minCell: Cell, maxCell: Cell) extends Universe {
   override val min = Some(minCell)
   override val max = Some(maxCell)
 }
-object ConstrainedGol {
-  def apply(width: Int, height: Int) = new ConstrainedGol(Cell(0, 0), Cell(width - 1, height - 1))
+object ConstrainedUniverse {
+  def apply(width: Int, height: Int) = new ConstrainedUniverse(Cell(0, 0), Cell(width - 1, height - 1))
 }

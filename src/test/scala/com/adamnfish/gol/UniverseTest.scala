@@ -4,31 +4,31 @@ import org.scalatest.FreeSpec
 import org.scalatest.exceptions.TestFailedException
 import org.scalatest.matchers.ShouldMatchers
 
-class GolTest extends FreeSpec with ShouldMatchers {
-  val constrainedGol = ConstrainedGol(6, 6)
+class UniverseTest extends FreeSpec with ShouldMatchers {
+  val constrainedGol = ConstrainedUniverse(6, 6)
 
   "isAlive" - {
     val world: World = Map(Cell(1, 1) -> true, Cell(2, 2) -> false)
 
     "returns true" - {
       "for an alive cell" in {
-        InfiniteGol.isAlive(Cell(1, 1), world) should equal(true)
+        InfiniteUniverse.isAlive(Cell(1, 1), world) should equal(true)
       }
     }
 
     "returns false" - {
       "for dead cell" in {
-        InfiniteGol.isAlive(Cell(2, 2), world) should equal(false)
+        InfiniteUniverse.isAlive(Cell(2, 2), world) should equal(false)
       }
       "by default" in {
-        InfiniteGol.isAlive(Cell(3, 3), world) should equal(false)
+        InfiniteUniverse.isAlive(Cell(3, 3), world) should equal(false)
       }
     }
   }
 
   "neighbours" - {
     "should return the neighbours for a given cell" in {
-      assertCellSetsEqual(InfiniteGol.neighbours(Cell(1, 1)), Set(
+      assertCellSetsEqual(InfiniteUniverse.neighbours(Cell(1, 1)), Set(
         Cell(0, 0),
         Cell(1, 0),
         Cell(2, 0),
@@ -41,7 +41,7 @@ class GolTest extends FreeSpec with ShouldMatchers {
     }
 
     "should not return the cell itself as a neighbour" in {
-      InfiniteGol.neighbours(Cell(1, 1)) should not contain Cell(1, 1)
+      InfiniteUniverse.neighbours(Cell(1, 1)) should not contain Cell(1, 1)
     }
 
     "in a constrained world" - {
@@ -88,24 +88,24 @@ class GolTest extends FreeSpec with ShouldMatchers {
     // rules from wikipedia
     "Any live cell with fewer than two live neighbours dies, as if caused by under-population" in {
       val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(10, 10))
-      InfiniteGol.isAliveNext(Cell(0, 1), world) should equal(false)
-      InfiniteGol.isAliveNext(Cell(10, 10), world) should equal(false)
+      InfiniteUniverse.isAliveNext(Cell(0, 1), world) should equal(false)
+      InfiniteUniverse.isAliveNext(Cell(10, 10), world) should equal(false)
     }
 
     "Any live cell with two or three live neighbours lives on to the next generation" in {
       val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(1, 0), Cell(10, 10), Cell(10, 11), Cell(10, 12), Cell(11, 11))
-      InfiniteGol.isAliveNext(Cell(1, 0), world) should equal(true)
-      InfiniteGol.isAliveNext(Cell(11, 11), world) should equal(true)
+      InfiniteUniverse.isAliveNext(Cell(1, 0), world) should equal(true)
+      InfiniteUniverse.isAliveNext(Cell(11, 11), world) should equal(true)
     }
 
     "Any live cell with more than three live neighbours dies, as if by overcrowding" in {
       val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(0, 2), Cell(1, 0), Cell(1, 1))
-      InfiniteGol.isAliveNext(Cell(1, 1), world) should equal(false)
+      InfiniteUniverse.isAliveNext(Cell(1, 1), world) should equal(false)
     }
 
     "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction" in {
       val world = WorldParser.fromCells(Cell(0, 0), Cell(0, 1), Cell(0, 2))
-      InfiniteGol.isAliveNext(Cell(1, 1), world) should equal(true)
+      InfiniteUniverse.isAliveNext(Cell(1, 1), world) should equal(true)
     }
   }
 
@@ -114,7 +114,7 @@ class GolTest extends FreeSpec with ShouldMatchers {
   }
 
   "constraints" - {
-    val universe = ConstrainedGol(4, 3)
+    val universe = ConstrainedUniverse(4, 3)
     "xMin" in {
       universe.constrainToXMin(-5) should equal(0)
     }
@@ -129,17 +129,17 @@ class GolTest extends FreeSpec with ShouldMatchers {
     }
 
     "are not in effect in an infinite universe" in {
-      InfiniteGol.constrainToXMin(-1000) should equal(-1000)
-      InfiniteGol.constrainToXMax(1000) should equal(1000)
-      InfiniteGol.constrainToYMin(-1000) should equal(-1000)
-      InfiniteGol.constrainToYMax(1000) should equal(1000)
+      InfiniteUniverse.constrainToXMin(-1000) should equal(-1000)
+      InfiniteUniverse.constrainToXMax(1000) should equal(1000)
+      InfiniteUniverse.constrainToYMin(-1000) should equal(-1000)
+      InfiniteUniverse.constrainToYMax(1000) should equal(1000)
     }
   }
 
   "boundaries" - {
     "for constrained universe" - {
       "should be defined by the constraint" in {
-        val universe = ConstrainedGol(3, 4)
+        val universe = ConstrainedUniverse(3, 4)
         universe.minX(Map.empty) should equal(0)
         universe.minY(Map.empty) should equal(0)
         universe.maxX(Map.empty) should equal(2)
@@ -151,26 +151,26 @@ class GolTest extends FreeSpec with ShouldMatchers {
       "should be defined by the edges of the active world" - {
         "should be defined by the constraint" - {
           "empty universe should have empty boundaries" in {
-            InfiniteGol.minX(Map.empty) should equal(0)
-            InfiniteGol.minY(Map.empty) should equal(0)
-            InfiniteGol.maxX(Map.empty) should equal(0)
-            InfiniteGol.maxY(Map.empty) should equal(0)
+            InfiniteUniverse.minX(Map.empty) should equal(0)
+            InfiniteUniverse.minY(Map.empty) should equal(0)
+            InfiniteUniverse.maxX(Map.empty) should equal(0)
+            InfiniteUniverse.maxY(Map.empty) should equal(0)
           }
 
           "populated world should define universe boundaries" in {
             val world = Map(Cell(-2, -3) -> true, Cell(1, 2) -> true)
-            InfiniteGol.minX(world) should equal(-2)
-            InfiniteGol.minY(world) should equal(-3)
-            InfiniteGol.maxX(world) should equal(1)
-            InfiniteGol.maxY(world) should equal(2)
+            InfiniteUniverse.minX(world) should equal(-2)
+            InfiniteUniverse.minY(world) should equal(-3)
+            InfiniteUniverse.maxX(world) should equal(1)
+            InfiniteUniverse.maxY(world) should equal(2)
           }
 
           "universe boundaries are not extended by dead cells in populated world" in {
             val world = Map(Cell(-2, -3) -> true, Cell(1, 2) -> true, Cell(100, 100) -> false)
-            InfiniteGol.minX(world) should equal(-2)
-            InfiniteGol.minY(world) should equal(-3)
-            InfiniteGol.maxX(world) should equal(1)
-            InfiniteGol.maxY(world) should equal(2)
+            InfiniteUniverse.minX(world) should equal(-2)
+            InfiniteUniverse.minY(world) should equal(-3)
+            InfiniteUniverse.maxX(world) should equal(1)
+            InfiniteUniverse.maxY(world) should equal(2)
           }
         }
       }
