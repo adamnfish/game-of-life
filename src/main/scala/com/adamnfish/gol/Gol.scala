@@ -58,18 +58,20 @@ trait Gol {
   /*
    * These functions provide boundaries that a UI may wish to respect
    */
-  def maxX(world: World): Int = max.map(_.x).getOrElse(world.filter(_._2).map {
-    case (cell, _) => cell.x
-  }.max)
-  def minX(world: World): Int = min.map(_.x).getOrElse(world.filter(_._2).map {
-    case (cell, _) => cell.x
-  }.min)
-  def maxY(world: World): Int = max.map(_.y).getOrElse(world.filter(_._2).map {
-    case (cell, _) => cell.y
-  }.max)
-  def minY(world: World): Int = min.map(_.y).getOrElse(world.filter(_._2).map {
-    case (cell, _) => cell.y
-  }.min)
+  def minX: World => Int = extractBoundary(min, _.x, _.min)
+  def maxX: World => Int = extractBoundary(max, _.x, _.max)
+  def minY: World => Int = extractBoundary(min, _.y, _.min)
+  def maxY: World => Int = extractBoundary(max, _.y, _.max)
+  private def extractBoundary(limit: Option[Cell], xOrY: Cell => Int, minOrMax: Iterable[Int] => Int)(world: World): Int = {
+    limit.map(xOrY).getOrElse {
+      world.filter(_._2).map {
+        case (cell, _) => xOrY(cell)
+      } match {
+        case Nil => 0
+        case xs => minOrMax(xs)
+      }
+    }
+  }
 
   /*
    * Internal functions to keep track of boundaries
