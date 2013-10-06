@@ -76,14 +76,13 @@ trait Gol {
   /*
    * Internal functions to keep track of boundaries
    */
-  // TODO: this is way overcomplicated! (Int, Option[Int]) => Int, surely
-  private def minimum(ns: Int*) = ns.min
-  private def maximum(ns: Int*) = ns.max
-  private def constrainToXMin(n: Int) = min.map(minCell => maximum(n, minCell.x)).getOrElse(n)
-  private def constrainToXMax(n: Int) = max.map(maxCell => minimum(n, maxCell.x)).getOrElse(n)
-  private def constrainToYMin(n: Int) = min.map(minCell => maximum(n, minCell.y)).getOrElse(n)
-  private def constrainToYMax(n: Int) = max.map(maxCell => minimum(n, maxCell.y)).getOrElse(n)
-
+  def constrainToXMin = constrainCoord(min, _.x, _ max _)_
+  def constrainToXMax = constrainCoord(max, _.x, _ min _)_
+  def constrainToYMin = constrainCoord(min, _.y, _ max _)_
+  def constrainToYMax = constrainCoord(max, _.y, _ min _)_
+  private def constrainCoord(limit: Option[Cell], xOrY: Cell => Int, minOrMax: (Int, Int) => Int)(n: Int): Int = {
+    limit.map(cell => minOrMax(n, xOrY(cell))).getOrElse(n)
+  }
 }
 object InfiniteGol extends Gol {
   override val min = None
