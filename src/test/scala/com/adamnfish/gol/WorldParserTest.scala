@@ -13,7 +13,7 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           ||    x
           ||
         """.stripMargin
-      val (universe, _) = WorldParser.fromString(worldString)
+      val (_, universe) = WorldParser.fromString(worldString)
       universe should equal(InfiniteUniverse)
       universe.max should equal(None)
       universe.min should equal(None)
@@ -27,8 +27,8 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           ||
           |+
         """.stripMargin
-      val (universe, world) = WorldParser.fromString(worldString)
-      universe.isInstanceOf[ConstrainedUniverse] should equal(true)
+      val (world, universe) = WorldParser.fromString(worldString)
+      universe.isInstanceOf[FiniteUniverse] should equal(true)
       universe.maxX(world) should equal(4)
       universe.minX(world) should equal(0)
       universe.maxY(world) should equal(2)
@@ -44,7 +44,7 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           ||
           |+
         """.stripMargin
-      val (universe, world) = WorldParser.fromString(world1)
+      val (world, universe) = WorldParser.fromString(world1)
       assertWorld(universe, world, Cell(0, 0), Cell(2, 0), Cell(1, 1))
     }
   }

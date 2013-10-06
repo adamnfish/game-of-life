@@ -5,7 +5,7 @@ import org.scalatest.exceptions.TestFailedException
 import org.scalatest.matchers.ShouldMatchers
 
 class UniverseTest extends FreeSpec with ShouldMatchers {
-  val constrainedGol = ConstrainedUniverse(6, 6)
+  val constrainedGol = FiniteUniverse(6, 6)
 
   "isAlive" - {
     val world: World = Map(Cell(1, 1) -> true, Cell(2, 2) -> false)
@@ -114,7 +114,7 @@ class UniverseTest extends FreeSpec with ShouldMatchers {
   }
 
   "constraints" - {
-    val universe = ConstrainedUniverse(4, 3)
+    val universe = FiniteUniverse(4, 3)
     "xMin" in {
       universe.constrainToXMin(-5) should equal(0)
     }
@@ -139,7 +139,7 @@ class UniverseTest extends FreeSpec with ShouldMatchers {
   "boundaries" - {
     "for constrained universe" - {
       "should be defined by the constraint" in {
-        val universe = ConstrainedUniverse(3, 4)
+        val universe = FiniteUniverse(3, 4)
         universe.minX(Map.empty) should equal(0)
         universe.minY(Map.empty) should equal(0)
         universe.maxX(Map.empty) should equal(2)

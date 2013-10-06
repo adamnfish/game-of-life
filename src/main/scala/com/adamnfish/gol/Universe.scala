@@ -87,10 +87,10 @@ object InfiniteUniverse extends Universe {
   override val min = None
   override val max = None
 }
-class ConstrainedUniverse private(minCell: Cell, maxCell: Cell) extends Universe {
+class FiniteUniverse private(minCell: Cell, maxCell: Cell) extends Universe {
   override val min = Some(minCell)
   override val max = Some(maxCell)
 }
-object ConstrainedUniverse {
-  def apply(width: Int, height: Int) = new ConstrainedUniverse(Cell(0, 0), Cell(width - 1, height - 1))
+object FiniteUniverse {
+  def apply(width: Int, height: Int) = new FiniteUniverse(Cell(0, 0), Cell(width - 1, height - 1))
 }
