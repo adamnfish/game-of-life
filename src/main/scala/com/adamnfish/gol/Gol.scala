@@ -9,12 +9,11 @@ trait Gol {
    * Returns a new world for the next "tick"
    */
   def nextWorld(world: World): World = {
-    // TODO convert to set before getting state of neighbours to eliminate repetition
     eligibleCells(world).flatMap {
-      case cell => neighbours(cell).flatMap { neighbour =>
-        if (isAliveNext(neighbour, world)) Some((neighbour, true))
-        else None
-      }
+      case cell => neighbours(cell)
+    }.flatMap { neighbour =>
+      if (isAliveNext(neighbour, world)) Some((neighbour, true))
+      else None
     }.toMap
   }
 
