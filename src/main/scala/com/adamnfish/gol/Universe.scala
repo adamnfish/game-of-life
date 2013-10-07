@@ -104,3 +104,5 @@ class FiniteUniverse private(minCell: Cell, maxCell: Cell) extends Universe {
 object FiniteUniverse {
   def apply(width: Int, height: Int) = new FiniteUniverse(Cell(0, 0), Cell(width - 1, height - 1))
 }
+
+// TODO: ToroidalUniverse
