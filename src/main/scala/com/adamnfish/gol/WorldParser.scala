@@ -50,14 +50,14 @@ object WorldParser {
   }
 
   // removes leading noise on lines before col containing starting +
-  def dropLineStarts(lines: List[String]): List[String] = {
+  private def dropLineStarts(lines: List[String]): List[String] = {
     val xStart = lines.head.indexWhere('+' ==)
     lines.map(_.drop(xStart))
   }
 
   // removes trailing noise on lines after closing +
   // You must have first run dropLineStarts
-  def dropLineEnds(lines: List[String]): List[String] = {
+  private def dropLineEnds(lines: List[String]): List[String] = {
     assert('+' == lines(0)(0), "You must call dropLineStarts prior to dropLineEnds")
     val xEnd = lines.head.drop(1).indexWhere('+' ==) + 1
     lines.map(_.take(xEnd))
