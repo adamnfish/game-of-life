@@ -1,4 +1,7 @@
-package com.adamnfish.gol
+package com.adamnfish.gol.io
+
+import com.adamnfish.gol.{ Cell, World, Universe, FiniteUniverse, InfiniteUniverse }
+
 
 object WorldParser {
 

@@ -1,7 +1,9 @@
-package com.adamnfish.gol
+package com.adamnfish.gol.io
 
 import org.scalatest.FreeSpec
 import org.scalatest.matchers.ShouldMatchers
+import com.adamnfish.gol._
+import com.adamnfish.gol.Cell
 
 class WorldParserTest extends FreeSpec with ShouldMatchers {
   "worldFromContent" - {

@@ -3,6 +3,7 @@ package com.adamnfish.gol
 import org.scalatest.FreeSpec
 import org.scalatest.exceptions.TestFailedException
 import org.scalatest.matchers.ShouldMatchers
+import com.adamnfish.gol.io.WorldParser
 
 class UniverseTest extends FreeSpec with ShouldMatchers {
   val constrainedGol = FiniteUniverse(6, 6)

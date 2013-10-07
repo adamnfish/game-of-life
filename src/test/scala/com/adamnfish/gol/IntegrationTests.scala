@@ -2,6 +2,7 @@ package com.adamnfish.gol
 
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.FunSuite
+import com.adamnfish.gol.io.WorldParser
 
 class IntegrationTests extends FunSuite with ShouldMatchers {
 

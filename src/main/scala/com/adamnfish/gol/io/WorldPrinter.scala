@@ -1,4 +1,6 @@
-package com.adamnfish.gol
+package com.adamnfish.gol.io
+
+import com.adamnfish.gol._
 
 object WorldPrinter {
   def print(world: World): List[String] = print(world, Universe.universeForWorld(world))
