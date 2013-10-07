@@ -80,4 +80,16 @@ object WorldParser {
   def fromCells(cells: Cell*): World = {
     cells.map { (_, true) }.toMap
   }
+
+  def fromStrings(strings: String*): (World, Universe) = {
+    (
+      strings.zipWithIndex.flatMap { case (row, y) =>
+        row.zipWithIndex.flatMap { case (alive, x) =>
+          if (' ' != alive) Some(Cell(x, y) -> true)
+          else None
+        }
+      }.toMap,
+      FiniteUniverse(strings.maxBy(_.size).size, strings.map(_.size).max)
+    )
+  }
 }
