@@ -83,6 +83,14 @@ trait Universe {
     limit.map(cell => minOrMax(n, xOrY(cell))).getOrElse(n)
   }
 }
+object Universe {
+  /*
+   * Returns a finite universe that will fit this world, suitable for UI display
+   */
+  def universeForWorld(world: World): Universe = {
+    FiniteUniverse(InfiniteUniverse.maxX(world) - InfiniteUniverse.minX(world) + 1, InfiniteUniverse.maxY(world) - InfiniteUniverse.minY(world) + 1)
+  }
+}
 
 object InfiniteUniverse extends Universe {
   override val min = None
