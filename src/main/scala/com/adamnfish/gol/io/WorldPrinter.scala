@@ -12,8 +12,13 @@ object WorldPrinter {
         else ' '
       }
     }
-    val headerFooter = "+" + ("=" * content.head.size) + "+"
-    headerFooter :: 
-      content.map("|" + _.mkString + "|") ::: List(headerFooter)
+
+    if (universe == InfiniteUniverse) {
+      content.map(_.mkString).toList
+    } else {
+      val headerFooter = "+" + ("=" * content.head.size) + "+"
+      headerFooter ::
+            content.map("|" + _.mkString + "|") ::: List(headerFooter)
+    }
   }
 }
