@@ -110,7 +110,38 @@ class UniverseTest extends FreeSpec with ShouldMatchers {
   }
 
   "eligibleCells" - {
+    "should return the neighbours of a cell" - {
+      val world = WorldParser.fromCells(Cell(1, 1))
 
+      "in a finite universe" in {
+        val universe = FiniteUniverse(3, 3)
+        universe.eligibleCells(world) should equal(
+          Set(Cell(0, 0), Cell(0, 1), Cell(0, 2), Cell(1, 0), Cell(1, 2), Cell(2, 0), Cell(2, 1), Cell(2,2))
+        )
+      }
+
+      "in an infinite universe" in {
+        InfiniteUniverse.eligibleCells(world) should equal(
+          Set(Cell(0, 0), Cell(0, 1), Cell(0, 2), Cell(1, 0), Cell(1, 2), Cell(2, 0), Cell(2, 1), Cell(2,2))
+        )
+      }
+
+      "excluding cells if they are off the edge of a finite universe" in {
+        val universe = FiniteUniverse(2, 2)
+        universe.eligibleCells(world) should equal(
+          Set(Cell(0, 0), Cell(0, 1), Cell(1, 0))
+        )
+      }
+    }
+
+    "should return empty if there are no alive cells" - {
+      "in a finite universe" in {
+        FiniteUniverse(10, 10).eligibleCells(WorldParser.fromCells()) should equal(Set.empty)
+      }
+      "even in an infinite universe" in {
+        InfiniteUniverse.eligibleCells(WorldParser.fromCells()) should equal(Set.empty)
+      }
+    }
   }
 
   "constraints" - {
