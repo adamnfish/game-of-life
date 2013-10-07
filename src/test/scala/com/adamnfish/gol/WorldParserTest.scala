@@ -4,6 +4,13 @@ import org.scalatest.FreeSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class WorldParserTest extends FreeSpec with ShouldMatchers {
+  "worldFromContent" - {
+    "extracts a world as it should" in {
+      val world = WorldParser.worldFromContent(List("+", "  x", " x"))
+      assertWorld(FiniteUniverse(2, 2), world, Cell(1, 0), Cell(0, 1))
+    }
+  }
+
   "fromString" - {
     "extracts infinite universe from unconstrained string" in {
       val worldString =
@@ -13,7 +20,7 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           ||    x
           ||
         """.stripMargin
-      val (_, universe) = WorldParser.fromString(worldString)
+      val (world, universe) = WorldParser.fromString(worldString)
       universe should equal(InfiniteUniverse)
       universe.max should equal(None)
       universe.min should equal(None)

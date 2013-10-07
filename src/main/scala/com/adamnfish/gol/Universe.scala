@@ -83,10 +83,12 @@ trait Universe {
     limit.map(cell => minOrMax(n, xOrY(cell))).getOrElse(n)
   }
 }
+
 object InfiniteUniverse extends Universe {
   override val min = None
   override val max = None
 }
+
 class FiniteUniverse private(minCell: Cell, maxCell: Cell) extends Universe {
   override val min = Some(minCell)
   override val max = Some(maxCell)
