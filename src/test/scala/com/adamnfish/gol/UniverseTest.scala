@@ -208,18 +208,6 @@ class UniverseTest extends FreeSpec with ShouldMatchers {
     }
   }
 
-  "nextWorld" - {
-    "integration tests: " - {
-      "#1, infinite" ignore {
-
-      }
-
-      "#2, constrained example" ignore {
-
-      }
-    }
-  }
-
   def assertCellSetsEqual(a: Set[Cell], b: Set[Cell]): Unit = {
     if (a.size != b.size) throw new TestFailedException(s"Set sizes differ: ${a.toString()} has ${a.size} els, compared to ${b.size} in ${b.toString()}", 20)
     if (a != b) {
