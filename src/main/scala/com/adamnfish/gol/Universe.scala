@@ -87,8 +87,8 @@ object Universe {
   /*
    * Returns a finite universe that will fit this world, suitable for UI display
    */
-  def universeForWorld(world: World): Universe = {
-    FiniteUniverse(InfiniteUniverse.maxX(world) - InfiniteUniverse.minX(world) + 1, InfiniteUniverse.maxY(world) - InfiniteUniverse.minY(world) + 1)
+  def universeForWorld(world: World): FiniteUniverse = {
+    FiniteUniverse(InfiniteUniverse.maxX(world) + 1, InfiniteUniverse.maxY(world) + 1)
   }
 }
 
