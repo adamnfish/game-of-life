@@ -1,6 +1,6 @@
 package com.adamnfish.gol.io
 
-import com.adamnfish.gol.{FiniteUniverse, InfiniteUniverse, World}
+import com.adamnfish.gol.World
 
 object Cli extends App {
   val contents = io.Source.fromFile(args(0)).mkString
@@ -11,7 +11,9 @@ object Cli extends App {
     Thread.sleep(300)
     clearScreen()
     WorldPrinter.print(world, universe) foreach println
-    evolve(universe.nextWorld(world))
+    val next = universe.nextWorld(world)
+    if (next == world) next
+    else evolve(next)
   }
 
   def clearScreen() = print("\033[H\033[2J")
