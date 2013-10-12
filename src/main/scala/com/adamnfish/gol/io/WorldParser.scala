@@ -81,7 +81,7 @@ object WorldParser {
    * Takes a list of cells, which are assumed to be alive
    */
   def fromCells(cells: Cell*): World = {
-    cells.map { (_, true) }.toMap
+    cells.map { _ -> true }.toMap
   }
 
   def fromStrings(strings: String*): (World, Universe) = {

@@ -12,7 +12,7 @@ trait Universe {
     eligibleCells(world).flatMap {
       case cell => neighbours(cell)
     }.flatMap { neighbour =>
-      if (isAliveNext(neighbour, world)) Some((neighbour, true))
+      if (isAliveNext(neighbour, world)) Some(neighbour -> true)
       else None
     }.toMap
   }
