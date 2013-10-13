@@ -1,10 +1,6 @@
 package com.adamnfish.gol
 
-trait Universe {
-  // playing area constraints
-  val min: Option[Cell]
-  val max: Option[Cell]
-
+trait Universe extends Boundaries {
   /*
    * Returns a new world for the next "tick"
    */
@@ -53,35 +49,6 @@ trait Universe {
       case x if x > 3 => false
     }
   }
-
-  /*
-   * These functions provide boundaries that a UI may wish to respect
-   */
-  def minX: World => Int = extractBoundary(min, _.x, _.min)
-  def maxX: World => Int = extractBoundary(max, _.x, _.max)
-  def minY: World => Int = extractBoundary(min, _.y, _.min)
-  def maxY: World => Int = extractBoundary(max, _.y, _.max)
-  private def extractBoundary(limit: Option[Cell], xOrY: Cell => Int, minOrMax: Iterable[Int] => Int)(world: World): Int = {
-    limit.map(xOrY).getOrElse {
-      world.filter(_._2).map {
-        case (cell, _) => xOrY(cell)
-      } match {
-        case Nil => 0
-        case xs => minOrMax(xs)
-      }
-    }
-  }
-
-  /*
-   * Internal functions to keep track of boundaries
-   */
-  def constrainToXMin = constrainCoord(min, _.x, _ max _)_
-  def constrainToXMax = constrainCoord(max, _.x, _ min _)_
-  def constrainToYMin = constrainCoord(min, _.y, _ max _)_
-  def constrainToYMax = constrainCoord(max, _.y, _ min _)_
-  private def constrainCoord(limit: Option[Cell], xOrY: Cell => Int, minOrMax: (Int, Int) => Int)(n: Int): Int = {
-    limit.map(cell => minOrMax(n, xOrY(cell))).getOrElse(n)
-  }
 }
 object Universe {
   /*
@@ -92,17 +59,13 @@ object Universe {
   }
 }
 
-object InfiniteUniverse extends Universe {
-  override val min = None
-  override val max = None
-}
+object InfiniteUniverse extends Universe with Unbounded
 
-class FiniteUniverse private(minCell: Cell, maxCell: Cell) extends Universe {
-  override val min = Some(minCell)
-  override val max = Some(maxCell)
+class FiniteUniverse private(minCell: Cell, maxCell: Cell) extends Universe with Bounded {
+  override val min = minCell
+  override val max = maxCell
 }
 object FiniteUniverse {
   def apply(width: Int, height: Int) = new FiniteUniverse(Cell(0, 0), Cell(width - 1, height - 1))
 }
-
 // TODO: ToroidalUniverse

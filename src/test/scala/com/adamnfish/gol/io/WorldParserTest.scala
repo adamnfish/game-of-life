@@ -24,8 +24,6 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
         """.stripMargin
       val (_, universe) = WorldParser.fromString(worldString)
       universe should equal(InfiniteUniverse)
-      universe.max should equal(None)
-      universe.min should equal(None)
     }
 
     "extracts the world from  unconstrained string" in {
