@@ -43,6 +43,7 @@ object WorldParser {
       // finite, remove the line starts, trailing line bits after + and final lines after closing +
       val content = dropLineEnds(dropLineStarts(lines)) match {
         case startRow :: tail => startRow :: tail.takeWhile(_.head != '+')
+        case Nil => Nil
       }
       (worldFromContent(content), FiniteUniverse(content.head.size - 1, content.size - 1))
     } else {
