@@ -1,0 +1,11 @@
+Clock - a period-2 oscillator that rotates
+
++------+
+|      |
+|  x   |
+| xx   |
+|   xx |
+|   x  |
+|      |
++------+
+

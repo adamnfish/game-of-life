@@ -3,11 +3,12 @@ package com.adamnfish.gol.io
 import com.adamnfish.gol.{Universe, World}
 
 import scala.annotation.tailrec
+import scala.util.Using
 
 object Cli {
   @main
   def main(fileName: String): Unit = {
-    val contents = io.Source.fromFile(fileName).mkString
+    val contents = Using.resource(io.Source.fromFile(fileName))(_.mkString)
     val (world, universe) = WorldParser.fromString(contents)
     enterAlternateScreen()
     try {
