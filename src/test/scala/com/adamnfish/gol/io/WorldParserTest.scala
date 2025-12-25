@@ -72,7 +72,8 @@ class WorldParserTest extends AnyFreeSpec with Matchers {
     (universe.minX(world) to universe.maxX(world)) flatMap { x =>
       (universe.minY(world) to universe.maxY(world)) map { y =>
         val cell: Cell = Cell(x, y)
-        if (liveCells.contains(cell)) universe.isAlive(cell, world) shouldEqual true
+        if (liveCells.contains(cell))
+          universe.isAlive(cell, world) shouldEqual true
         else universe.isAlive(cell, world) shouldEqual false
       }
     }

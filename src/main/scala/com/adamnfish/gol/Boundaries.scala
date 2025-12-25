@@ -23,12 +23,16 @@ trait Unbounded extends Boundaries {
   override def maxX(world: World): Int = extractBoundary(_.x, _.max, world)
   override def minY(world: World): Int = extractBoundary(_.y, _.min, world)
   override def maxY(world: World): Int = extractBoundary(_.y, _.max, world)
-  private def extractBoundary(xOrY: Cell => Int, minOrMax: Iterable[Int] => Int, world: World): Int = {
-    world.filter(_._2).map {
-      case (cell, _) => xOrY(cell)
+  private def extractBoundary(
+      xOrY: Cell => Int,
+      minOrMax: Iterable[Int] => Int,
+      world: World
+  ): Int = {
+    world.filter(_._2).map { case (cell, _) =>
+      xOrY(cell)
     } match {
       case Nil => 0
-      case xs => minOrMax(xs)
+      case xs  => minOrMax(xs)
     }
   }
 
