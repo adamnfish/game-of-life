@@ -22,13 +22,6 @@ tramp
 *.iws
 .idea/
 
-### PlayFramework ###
-# Extracted from https://github.com/ulrich/macaron-factory/blob/master/.gitignore
-# Ignore all dotfiles...
-.*
-# except for .gitignore
-!.gitignore
-
 # Ignore Play! working directory #
 db
 eclipse
@@ -54,7 +47,7 @@ target/
 lib_managed/
 src_managed/
 project/boot/
-
+.bsp/
 
 ### Scala ###
 *.class

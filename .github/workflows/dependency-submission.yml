@@ -1,0 +1,21 @@
+name: Dependency Submission
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  dependency-submission:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: guardian/setup-scala@v1
+
+      - uses: scalacenter/sbt-dependency-submission@v3
+

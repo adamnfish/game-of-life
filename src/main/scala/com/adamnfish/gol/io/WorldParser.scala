@@ -1,7 +1,12 @@
 package com.adamnfish.gol.io
 
-import com.adamnfish.gol.{ Cell, World, Universe, FiniteUniverse, InfiniteUniverse }
-
+import com.adamnfish.gol.{
+  Cell,
+  World,
+  Universe,
+  FiniteUniverse,
+  InfiniteUniverse
+}
 
 object WorldParser {
 
@@ -35,17 +40,24 @@ object WorldParser {
    * The tests will provide additional examples
    */
   def fromString(input: String): (World, Universe) = {
-    val lines = input.split("\\r?\\n")
-      .dropWhile(!_.contains('+'))  // drop leading lines
+    val lines = input
+      .split("\\r?\\n")
+      .dropWhile(!_.contains('+')) // drop leading lines
       .toList
-    if (lines.isEmpty) throw new IllegalArgumentException("Input string did not contain starting + marker")
-    if (lines.head.count('+' ==) > 1) {
+    if (lines.isEmpty)
+      throw new IllegalArgumentException(
+        "Input string did not contain starting + marker"
+      )
+    if (lines.head.count(_ == '+') > 1) {
       // finite, remove the line starts, trailing line bits after + and final lines after closing +
       val content = dropLineEnds(dropLineStarts(lines)) match {
         case startRow :: tail => startRow :: tail.takeWhile(_.head != '+')
-        case Nil => Nil
+        case Nil              => Nil
       }
-      (worldFromContent(content), FiniteUniverse(content.head.size - 1, content.size - 1))
+      (
+        worldFromContent(content),
+        FiniteUniverse(content.head.size - 1, content.size - 1)
+      )
     } else {
       // infinite, just drop line starts
       val content = dropLineStarts(lines)
@@ -55,27 +67,35 @@ object WorldParser {
 
   // removes leading noise on lines before col containing starting +
   private def dropLineStarts(lines: List[String]): List[String] = {
-    val xStart = lines.head.indexWhere('+' ==)
+    val xStart = lines.head.indexOf('+')
     lines.map(_.drop(xStart))
   }
 
   // removes trailing noise on lines after closing +
   // You must have first run dropLineStarts
   private def dropLineEnds(lines: List[String]): List[String] = {
-    assert('+' == lines(0)(0), "You must call dropLineStarts prior to dropLineEnds")
-    val xEnd = lines.head.drop(1).indexWhere('+' ==) + 1
+    assert(
+      '+' == lines(0)(0),
+      "You must call dropLineStarts prior to dropLineEnds"
+    )
+    val xEnd = lines.head.drop(1).indexOf('+') + 1
     lines.map(_.take(xEnd))
   }
 
   def worldFromContent(lines: List[String]): World = {
-    lines.drop(1)  // remove first row
-      .zipWithIndex.flatMap { case ((line, y)) =>
-        line.drop(1)  // remove first col
-          .zipWithIndex.flatMap { case ((char, x)) =>
+    lines
+      .drop(1) // remove first row
+      .zipWithIndex
+      .flatMap { case ((line, y)) =>
+        line
+          .drop(1) // remove first col
+          .zipWithIndex
+          .flatMap { case ((char, x)) =>
             if (char != ' ') Some(Cell(x, y) -> true)
             else None
           }
-      }.toMap
+      }
+      .toMap
   }
 
   /*

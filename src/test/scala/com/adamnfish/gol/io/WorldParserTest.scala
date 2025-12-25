@@ -1,11 +1,11 @@
 package com.adamnfish.gol.io
 
-import org.scalatest.FreeSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
 import com.adamnfish.gol._
 import com.adamnfish.gol.Cell
 
-class WorldParserTest extends FreeSpec with ShouldMatchers {
+class WorldParserTest extends AnyFreeSpec with Matchers {
   "worldFromContent" - {
     "extracts a world as it should" in {
       val world = WorldParser.worldFromContent(List("+", "  x", " x"))
@@ -23,7 +23,7 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           ||
         """.stripMargin
       val (_, universe) = WorldParser.fromString(worldString)
-      universe should equal(InfiniteUniverse)
+      universe shouldEqual InfiniteUniverse
     }
 
     "extracts the world from  unconstrained string" in {
@@ -47,11 +47,11 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
           |+
         """.stripMargin
       val (world, universe) = WorldParser.fromString(worldString)
-      universe.isInstanceOf[FiniteUniverse] should equal(true)
-      universe.maxX(world) should equal(4)
-      universe.minX(world) should equal(0)
-      universe.maxY(world) should equal(2)
-      universe.minY(world) should equal(0)
+      universe.isInstanceOf[FiniteUniverse] shouldEqual true
+      universe.maxX(world) shouldEqual 4
+      universe.minX(world) shouldEqual 0
+      universe.maxY(world) shouldEqual 2
+      universe.minY(world) shouldEqual 0
     }
 
     "can parse constrained worlds" in {
@@ -72,8 +72,9 @@ class WorldParserTest extends FreeSpec with ShouldMatchers {
     (universe.minX(world) to universe.maxX(world)) flatMap { x =>
       (universe.minY(world) to universe.maxY(world)) map { y =>
         val cell: Cell = Cell(x, y)
-        if (liveCells.contains(cell)) universe.isAlive(cell, world) should equal(true)
-        else universe.isAlive(cell, world) should equal(false)
+        if (liveCells.contains(cell))
+          universe.isAlive(cell, world) shouldEqual true
+        else universe.isAlive(cell, world) shouldEqual false
       }
     }
   }
