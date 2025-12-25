@@ -39,7 +39,7 @@ object WorldParser {
       .dropWhile(!_.contains('+'))  // drop leading lines
       .toList
     if (lines.isEmpty) throw new IllegalArgumentException("Input string did not contain starting + marker")
-    if (lines.head.count('+' ==) > 1) {
+    if (lines.head.count(_ == '+') > 1) {
       // finite, remove the line starts, trailing line bits after + and final lines after closing +
       val content = dropLineEnds(dropLineStarts(lines)) match {
         case startRow :: tail => startRow :: tail.takeWhile(_.head != '+')
@@ -55,7 +55,7 @@ object WorldParser {
 
   // removes leading noise on lines before col containing starting +
   private def dropLineStarts(lines: List[String]): List[String] = {
-    val xStart = lines.head.indexWhere('+' ==)
+    val xStart = lines.head.indexOf('+')
     lines.map(_.drop(xStart))
   }
 
@@ -63,7 +63,7 @@ object WorldParser {
   // You must have first run dropLineStarts
   private def dropLineEnds(lines: List[String]): List[String] = {
     assert('+' == lines(0)(0), "You must call dropLineStarts prior to dropLineEnds")
-    val xEnd = lines.head.drop(1).indexWhere('+' ==) + 1
+    val xEnd = lines.head.drop(1).indexOf('+') + 1
     lines.map(_.take(xEnd))
   }
 
